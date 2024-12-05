@@ -1,21 +1,20 @@
 // routes/users.js
 
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+import { createUser, updateUserLevel } from '../controllers/userController.js';  // Import user controller functions
+import { validateCode, validateCodeLevel2, validateCodeLevel3 } from '../controllers/levelController.js';  // Import level controller functions
 
-// Import controllers
-const userController = require('../controllers/userController');
-const levelController = require('../controllers/levelController');
+const router = Router();
 
 // Route to save user data
-router.post('/createUser', userController.createUser);  // Creating user with 'createUser' endpoint
+router.post('/createUser', createUser);  // Creating user with 'createUser' endpoint
 
 // Route to update user level
-router.put('/updateUserLevel', userController.updateUserLevel);  // Updated to use PUT for updates
+router.put('/updateUserLevel', updateUserLevel);  // Updated to use PUT for updates
 
 // Endpoint for code validation
-router.post('/validateCode', levelController.validateCode);  // For Level 1 validation
-router.post('/validateCodeLevel2', levelController.validateCodeLevel2);  // For Level 2 validation
-router.post('/validateCodeLevel3', levelController.validateCodeLevel3);  // For Level 3 validation
+router.post('/validateCode', validateCode);  // For Level 1 validation
+router.post('/validateCodeLevel2', validateCodeLevel2);  // For Level 2 validation
+router.post('/validateCodeLevel3', validateCodeLevel3);  // For Level 3 validation
 
-module.exports = router;
+export default router;  // Ensure proper export

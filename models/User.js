@@ -1,6 +1,6 @@
 // models/User.js
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';  // Use import for ES module
 
 const userSchema = new mongoose.Schema({
     Username: { type: String, required: true },
@@ -22,5 +22,6 @@ const userSchema = new mongoose.Schema({
 // Optionally add a unique index for compound fields if required
 userSchema.index({ Username: 1, Useryear: 1, Userhallticketno: 1 }, { unique: true });
 
-// Create and export the User model
-module.exports = mongoose.model('User', userSchema);
+// Create and export the User model using ES module export
+const User = mongoose.model('User', userSchema);
+export default User;

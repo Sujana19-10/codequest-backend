@@ -1,9 +1,10 @@
 // controllers/userController.js
 
-const User = require('../models/User'); // Ensure the correct path
+import User from '../models/User.js';  // Correct import syntax
+
 
 // Function to create a new user
-exports.createUser = async (req, res) => {
+const createUser = async (req, res) => {
     try {
         console.log('Received Data:', req.body);
 
@@ -44,7 +45,7 @@ exports.createUser = async (req, res) => {
 };
 
 // Function to update user level
-exports.updateUserLevel = async (req, res) => {
+const updateUserLevel = async (req, res) => {
     try {
         const { Username, Useryear, Userhallticketno, level } = req.body;
 
@@ -70,3 +71,6 @@ exports.updateUserLevel = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error updating user level', error: err.message });
     }
 };
+
+// Export functions using ES module syntax
+export { createUser, updateUserLevel };

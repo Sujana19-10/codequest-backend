@@ -1,13 +1,13 @@
-// controllers/levelController.js
+import axios from 'axios';  // Correct import statement for axios
+import dotenv from 'dotenv'; // Import dotenv in ES module style
 
-const axios = require('axios'); // Use Axios to call the Python service
-require('dotenv').config(); // Load environment variables
+dotenv.config(); // Load environment variables
 
 // Python backend URL from environment variables
 const pythonBackendUrl = process.env.PYTHON_BACKEND_URL || 'http://localhost:5000';  // Default to localhost if not set
 
 // Validate code for Level 1
-exports.validateCode = async (req, res) => {
+export const validateCode = async (req, res) => {
     const userCode = req.body.code;
 
     if (!userCode) {
@@ -31,7 +31,7 @@ exports.validateCode = async (req, res) => {
 };
 
 // Validate code for Level 2
-exports.validateCodeLevel2 = async (req, res) => {
+export const validateCodeLevel2 = async (req, res) => {
     const userCode1 = req.body.code;  // Using the correct variable for Level 2
 
     if (!userCode1) {
@@ -55,7 +55,7 @@ exports.validateCodeLevel2 = async (req, res) => {
 };
 
 // New handler for Level 3 validation
-exports.validateCodeLevel3 = async (req, res) => {
+export const validateCodeLevel3 = async (req, res) => {
     const userCode2 = req.body.code;  // Using the correct variable for Level 3
 
     if (!userCode2) {
