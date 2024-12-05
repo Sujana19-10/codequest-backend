@@ -1,37 +1,33 @@
-// server/index.js
-import userRoutes from './routes/users.js';
+// index.js
+
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import userRoutes from './routes/users.js';  // Import routes
 
-
-dotenv.config();
+dotenv.config();  // Load environment variables
 
 const app = express();
 
-// CORS setup for production and development environments
-const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' ? 'https://codequest-gamification.netlify.app' : '*', // adjust the URL to your production app
-  methods: 'GET,POST',
-  credentials: true
-};
+// Middleware
+app.use(cors());  // Enable Cross-Origin Requests
+app.use(bodyParser.json());  // Parse JSON bodies
 
-app.use(cors(corsOptions));
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/codequest', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log('MongoDB connection error:', err));
 
-// Middleware for parsing JSON
-app.use(express.json());
+// Use routes
+app.use('/api/users', userRoutes);  // Users-related routes
 
-// API routes
-app.use('/api', userRoutes);
-
-// MongoDB connection setup
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.log('Error connecting to MongoDB: ', err));
-
-// Port setup
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
