@@ -1,13 +1,14 @@
-// database/dbConfig.js
 
-const mongoose = require('mongoose');
-require('dotenv').config();  // Load environment variables
+import mongoose from 'mongoose';
 
-const dbURI = process.env.MONGO_URI;  // MongoDB URI
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log('MongoDB connected successfully');
+  } catch (error) {
+    console.error('MongoDB connection failed: ', error.message);
+    process.exit(1);  // Exit the process with failure if the DB connection fails
+  }
+};
 
-mongoose
-  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected for Node.js backend'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-module.exports = mongoose;
+export default connectDB;

@@ -1,31 +1,37 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const userRoutes = require('./routes/users');  // Import user routes
-require('dotenv').config();  // Load environment variables
+// server/index.js
+import userRoutes from './routes/users.js';
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
-// MongoDB Connection (Using the correct environment variable)
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.log('MongoDB connection error:', err));
+
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;  // Set the port (3001 by default)
 
-// Middleware setup
-app.use(cors());  // Enable cross-origin resource sharing (CORS)
-app.use(bodyParser.json());  // Parse incoming requests with JSON payloads
+// CORS setup for production and development environments
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' ? 'https://codequest-gamification.netlify.app' : '*', // adjust the URL to your production app
+  methods: 'GET,POST',
+  credentials: true
+};
 
-// API Routes
-app.use('/api/users', userRoutes);  // User-related routes
+app.use(cors(corsOptions));
 
-// Server Start
+// Middleware for parsing JSON
+app.use(express.json());
+
+// API routes
+app.use('/api', userRoutes);
+
+// MongoDB connection setup
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => console.log('Error connecting to MongoDB: ', err));
+
+// Port setup
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Node.js Server running on port ${PORT}`);
-
-  // Log URLs for confirmation
-  console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
-  console.log(`Backend URL: ${process.env.CODEQUEST_BACKEND_URL || 'http://localhost:3001'}`);
-  console.log(`Python Backend URL: ${process.env.PYTHON_BACKEND_URL || 'http://localhost:5000'}`);
+  console.log(`Server running on port ${PORT}`);
 });
